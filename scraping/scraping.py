@@ -19,7 +19,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 def find_or_create_folder(service, folder_name):
     """
-    Searches for a folder by name in Google Drive and returns its ID. 
+    Searches for a folder by name in Google Drive and returns its ID.
     If the folder does not exist, it is created.
 
     Args:
@@ -52,7 +52,8 @@ def find_or_create_folder(service, folder_name):
         return folder.get('id')
 
 
-def upload_file(service, file_name, file_path, folder_id, mime_type='image/png'):
+def upload_file(service, file_name, file_path,
+                folder_id, mime_type='image/png'):
     """
     Uploads a file to Google Drive under a specific folder.
 
@@ -80,7 +81,7 @@ def auth():
     """
     Authenticates the user with Google Drive API and returns the service object.
 
-    This function handles token creation and refresh for Google Drive API access. 
+    This function handles token creation and refresh for Google Drive API access.
     It uses a token.json file for storing user credentials.
 
     Returns:
@@ -129,7 +130,7 @@ def upload_to_drive(dir, target):
 
 def scraping(dir):
     """
-    Performs web scraping using Selenium, saves screenshots of a website, 
+    Performs web scraping using Selenium, saves screenshots of a website,
     and stores them in the specified directory.
 
     Args:
