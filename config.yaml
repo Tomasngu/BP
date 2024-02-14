@@ -1,0 +1,6 @@
+path: /home/tomas/FIT/BP/target
+train: images/train
+val: images/val
+
+names:
+  0: Elephant
