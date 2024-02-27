@@ -21,7 +21,7 @@ CATEGORY_INDEX = label_map_util.create_category_index_from_labelmap(PATH_TO_LABE
 OUTPUT_JSON = 'a.json'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'    # Suppress TensorFlow logging
 tf.get_logger().setLevel('ERROR')
-INPUT_DIR = '../captured_frames'
+INPUT_DIR = '../cx'
 
 
 @tf.function
@@ -34,9 +34,6 @@ def detect_fn(image, detection_model):
 
     return detections, prediction_dict, tf.reshape(shapes, [-1])
 
-
-category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS,
-                                                                    use_display_name=True)
 
 
 def predict_elephants(image_path, detection_model):
@@ -63,8 +60,8 @@ def predict_elephants(image_path, detection_model):
 
             display_str = ''
 
-            if (detections['detection_classes'][0].numpy() + label_id_offset).astype(int)[i] in six.viewkeys(category_index):
-                class_name = category_index[(detections['detection_classes'][0].numpy(
+            if (detections['detection_classes'][0].numpy() + label_id_offset).astype(int)[i] in six.viewkeys(CATEGORY_INDEX):
+                class_name = CATEGORY_INDEX[(detections['detection_classes'][0].numpy(
                 ) + label_id_offset).astype(int)[i]]['name']
                 display_str = str(class_name)
                 display_str = '{}: {}%'.format(display_str, round(
@@ -146,9 +143,10 @@ def convert_to_coco(tf_detections, images_metadata):
         })
 
         # Process each detection
-        for box, score, class_id in zip(detection['detection_boxes'][0], detection['detection_scores'][0], detection['detection_classes'][0]):
+        for box, score, _ in zip(detection['detection_boxes'][0], detection['detection_scores'][0], detection['detection_classes'][0]):
             if score < 0.4: 
                 continue
+            print(score)
 
             # Convert TensorFlow box format to COCO format
             ymin, xmin, ymax, xmax = box.numpy()
@@ -182,7 +180,10 @@ def main(input_dir):
     model_config = configs['model']
     detection_model = model_builder.build(
         model_config=model_config, is_training=False)
-
+    # Restore checkpoint
+    ckpt = tf.compat.v2.train.Checkpoint(model=detection_model)
+    ckpt.restore(os.path.join('inference_graph/checkpoint/', 'ckpt-0')
+             ).expect_partial()
     images_metadata = []
     tf_detections = []
 
