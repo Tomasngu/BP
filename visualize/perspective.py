@@ -20,8 +20,27 @@ def transform_row2(M, x, y, width, height):
     lower_right_proj = transform_point(M, right, down)        
     return x_proj, y_proj, [upper_left_proj, upper_right_proj, lower_right_proj, lower_left_proj]
 
-def shift(x, y, width, height):
-    y += height/3
+def transform_row(M, x, y):
+
+    def transform_point(M, x, y):
+        points = np.array([[x, y]], dtype='float32')  
+        points_reshaped = np.array([points])
+        pointsOut = cv2.perspectiveTransform(points_reshaped, M)
+        return pointsOut[0,0,0], pointsOut[0,0,1]
+
+    x_proj, y_proj = transform_point(M, x, y)
+    return x_proj, y_proj
+
+
+def get_size(map_width_px, map_height_px, map_width_real):
+    ratio = ELEPHANT_SIZE/map_width_real
+    return ratio, ratio*map_width_px/map_height_px
+
+def shift(x, y, width, height, camera):
+    if camera in [1, 2, 6]:
+        y += height/3
+    else:
+        y += height/2
     return x, y, width, height
 
 def calculate_iou(boxA, boxB):
