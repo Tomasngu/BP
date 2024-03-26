@@ -4,24 +4,24 @@ import cv2
 ELEPHANT_SIZE = 2.5
 IMG_WIDTH, IMG_HEIGHT = 1920, 1000
 
-MAP_WIDTH_12, MAP_HEIGHT_12 = 846, 572
-MAP_REAL_WIDTH_12 = 12
+MAP_WIDTH_12, MAP_HEIGHT_12 = 686, 470
+MAP_REAL_WIDTH_12 = 20
 
 MAP_WIDTH_6, MAP_HEIGHT_6 = 890, 573
-MAP_REAL_WIDTH_6 = 60
+MAP_REAL_WIDTH_6 = 68
 
 MAP_WIDTH_4, MAP_HEIGHT_4 = 730, 488
-MAP_REAL_WIDTH_4 = 45
+MAP_REAL_WIDTH_4 = 51
 
-MAP_WIDTH_7, MAP_HEIGHT_7 = 608, 572
-MAP_REAL_WIDTH_7 = 9
+MAP_WIDTH_7, MAP_HEIGHT_7 = 610, 470
+MAP_REAL_WIDTH_7 = 18
 
 IMAGE_PTS_1 = np.array([[342, 272], [1346, 120], [1320, 396], [598, 410]])
-MAP_PTS_1 = np.array([[169, 555],  [20, 243], [281, 292], [282, 458]])
+MAP_PTS_1 = np.array([[162, 464],  [12, 153], [272, 202], [272, 370]])
 H1, _ = cv2.findHomography(IMAGE_PTS_1, MAP_PTS_1)
 
 IMAGE_PTS_2 = np.array([[35, 447], [1050, 299], [912, 405], [281, 513]])
-MAP_PTS_2 = np.array([[685, 242],  [678, 552], [599, 463], [599, 291]])
+MAP_PTS_2 = np.array([[678, 153],  [673, 463], [592, 372], [592, 200]])
 H2, _ = cv2.findHomography(IMAGE_PTS_2, MAP_PTS_2)
 
 IMAGE_PTS_4 = np.array([[748, 340],[1711, 375], [1778, 148],[1044, 91],  [430, 55],[175, 151]])
@@ -33,7 +33,7 @@ MAP_PTS_6 = np.array([[563, 62], [360, 32], [363, 391], [95, 263]])
 H6, _ = cv2.findHomography(IMAGE_PTS_6, MAP_PTS_6)
 
 IMAGE_PTS_7 = np.array([[711, 544],[1353, 564], [1651, 402],[633, 187]])
-MAP_PTS_7 = np.array([ [347, 331], [348, 462], [444, 556], [598, 286]])
+MAP_PTS_7 = np.array([ [347, 241], [347, 369], [444, 464], [598, 192]])
 H7, _ = cv2.findHomography(IMAGE_PTS_7, MAP_PTS_7)
 
 CAMERA_to_H = {
@@ -59,10 +59,14 @@ CAMERA_to_REAL = {
     6: MAP_REAL_WIDTH_6,
     7: MAP_REAL_WIDTH_7
 }
+CAMERA_to_PATH = {
+    1: 'maps/map12.png',
+    2: 'maps/map12.png',
+    4: 'maps/map4_real.png',
+    6: 'maps/map6_real.png',
+    7: 'maps/map7.png',
+}
 
 def shift(x, y, width, height, camera):
-    if camera in [1, 2, 4, 6, 7]:
-        y += height/3
-    else:
-        y += height/2
+    y += height/3
     return x, y, width, height

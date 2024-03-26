@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from image_points import ELEPHANT_SIZE, MAP_WIDTH_12
 
 def transform_row2(M, x, y, width, height):
 
@@ -43,34 +44,42 @@ def shift(x, y, width, height, camera):
         y += height/2
     return x, y, width, height
 
-def calculate_iou(boxA, boxB):
-    """
-    Calculate the Intersection over Union (IoU) of two bounding boxes.
+def remove_duplicate_elephants(df, threshold=0.1):
+    def calculate_distance(row1, row2):
+        """Calculate the Euclidean distance between two points."""
+        return np.linalg.norm(np.array([row1['X_center'], row1['Y_center']]) - np.array([row2['X_center'], row2['Y_center']]))
 
-    Parameters:
-    - boxA: The first bounding box as a tuple (x, y, width, height)
-    - boxB: The second bounding box as a tuple (x, y, width, height)
+    # Prepare a list to track indices to remove
+    indices_to_remove = []
 
-    Returns:
-    - The IoU as a float. This will be 0 if the boxes do not intersect.
-    """
-    # Determine the coordinates of the intersection rectangle
-    xA = max(boxA[0], boxB[0])
-    yA = max(boxA[1], boxB[1])
-    xB = min(boxA[0] + boxA[2], boxB[0] + boxB[2])
-    yB = min(boxA[1] + boxA[3], boxB[1] + boxB[3])
-
-    # Compute the area of intersection rectangle
-    interArea = max(0, xB - xA) * max(0, yB - yA)
-
-    # Compute the area of both the bounding boxes
-    boxAArea = boxA[2] * boxA[3]
-    boxBArea = boxB[2] * boxB[3]
-
-    # Compute the union area by adding both areas and subtracting the intersection area
-    unionArea = boxAArea + boxBArea - interArea
-
-    # Compute the IoU
-    iou = interArea / unionArea
-
-    return iou
+    # Iterate through each unique timestamp
+    for timestamp in df['Date'].unique():
+        # Filter entries for this specific timestamp for both cameras
+        cam1_entries = df[(df['Camera'] == 1) & (df['Date'] == timestamp)]
+        cam2_entries = df[(df['Camera'] == 2) & (df['Date'] == timestamp)]
+        
+        # Nested loop to calculate distances between all cam1 and cam2 entries
+        for index1, row1 in cam1_entries.iterrows():
+            for index2, row2 in cam2_entries.iterrows():
+                distance = calculate_distance(row1, row2)
+                
+                # If distance is within threshold, check mutual closeness
+                if distance < threshold:
+                    # Find closest cam2 entry to current cam1 entry
+                    
+                    closest_to_cam1 = cam2_entries.apply(lambda row: calculate_distance(row, row1), axis=1).idxmin()
+                    # Find closest cam1 entry to current cam2 entry
+                    closest_to_cam2 = cam1_entries.apply(lambda row: calculate_distance(row, row2), axis=1).idxmin()
+                    # Check mutual closeness
+                    if closest_to_cam1 == index2 and closest_to_cam2 == index1:
+                        assert index2 not in indices_to_remove
+                        indices_to_remove.append(index2)  # Add cam2 entry to removal list
+                        # c1 = (row1['X_center'], row1['Y_center'])
+                        # c2 = (row2['X_center'], row2['Y_center'])
+                        # # print(distance)
+                        # c1 = (c1[0]*MAP_WIDTH_12, c1[1]*MAP_HEIGHT_12)
+                        # c2 = (c2[0]*MAP_WIDTH_12, c2[1]*MAP_HEIGHT_12)
+    # Drop the entries from the original DataFrame
+    df_cleaned = df.drop(indices_to_remove)
+    
+    return df_cleaned
