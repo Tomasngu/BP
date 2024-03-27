@@ -18,10 +18,10 @@ PATH_TO_LABELS = os.path.join('inference_graph', 'labelmap.pbtxt')
 PATH_TO_CONFIG = os.path.join('inference_graph', 'pipeline.config')
 CATEGORY_INDEX = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS,
                                                                     use_display_name=True)
-OUTPUT_JSON = 'a.json'
+OUTPUT_JSON = 'tf_labels.json'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'    # Suppress TensorFlow logging
 tf.get_logger().setLevel('ERROR')
-INPUT_DIR = '../cx'
+INPUT_DIR = 'SLONI_label'
 
 
 @tf.function
@@ -175,7 +175,7 @@ def convert_to_coco(tf_detections, images_metadata):
 
     return coco_output
 
-def main(input_dir):
+def get_annotations(input_dir):
     configs = config_util.get_configs_from_pipeline_file(PATH_TO_CONFIG)
     model_config = configs['model']
     detection_model = model_builder.build(
@@ -202,4 +202,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Get annotations from your data.')
     parser.add_argument("--dir", default=INPUT_DIR, help="Input your image directory.")
     args = parser.parse_args()
-    main(args.dir)
+    get_annotations(args.dir)
