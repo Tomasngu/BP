@@ -7,7 +7,7 @@ PATTERN = re.compile(r'screenshot(\d+)_(\d{2})_(\d{2})__(\d{2})_(\d{2})\.txt')
 # df = pd.DataFrame(columns=['Camera', 'Date', 'X_center', 'Y_center', 'Width', 'Height'])
 NUMERIC_COLS = ['Camera', 'X_center', 'Y_center', 'Width', 'Height']
 
-def read_positions(label_dir='../../data/labels', output_csv='positions.csv'):
+def read_positions(label_dir='../../data_all/labels', output_csv='positions.csv'):
     df = pd.DataFrame(columns=['Camera', 'Date', 'X_center', 'Y_center', 'Width', 'Height'])
     csv_file = output_csv
     if os.path.exists(csv_file):
@@ -37,5 +37,5 @@ def read_positions(label_dir='../../data/labels', output_csv='positions.csv'):
     df['Date'] = pd.to_datetime(df['Date'])
     df['Date'] = df['Date'] + pd.Timedelta(hours=1)
     if not os.path.exists(csv_file):
-        df.to_csv('positions.csv', index=False)
+        df.to_csv(csv_file, index=False)
     return df

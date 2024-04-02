@@ -3,33 +3,38 @@ import math
 import cv2
 import numpy as np
 
-def plot_images(*imgs, titles=[], channels='bgr', normalize=False, ticks_off=True, title_size=32, width=30, height=30):
-    assert channels.lower() in ['bgr', 'rgb', 'mono'], 'Possible values for channels are: bgr, rgb or mono!'
 
-    #     f = plt.figure(figsize=(30, 20))
-    width_def = 30
-    height_def = 30
+#inspired by https://gitlab.fit.cvut.cz/bi-svz/improutils_package/-/blob/master/improutils/visualisation/visualisation.py
+def plot_images(*imgs, titles=[], title_size=32, width=30, height=30):
+    """
+    Display multiple images in a single matplotlib figure with optional titles.
+    
+    Parameters:
+    - imgs (*args): Variable number of image arrays. Each image should be in the format expected by the 'channels' parameter.
+    - titles (list of str, optional): Titles for each image. The length of 'titles' should match the number of images.
+    - title_size (int, optional): Font size of the titles
+    - width (int, optional): Desired width of each image in the grid. 
+    - height (int, optional): Desired height of each image in the grid. 
+    
+    Raises:
+    """
+    width_def = width
+    height_def = height
 
     width = math.ceil(math.sqrt(len(imgs)))
     height = math.ceil(len(imgs) / width)
 
     height_def = height_def / 5 * width
-    #     print(height_def)
-    if height_def > 65:
-        height_def = 65
 
     f = plt.figure(figsize=(width_def, height_def))
 
-    #     print(str(width) + ' , ' + str(height))
     for i, img in enumerate(imgs, 1):
         ax = f.add_subplot(height, width, i)
-        if ticks_off:
-            ax.axis('off')
+        ax.axis('off')
 
         if len(titles) != 0:
             if len(imgs) != len(titles):
                 print('WARNING titles length is not the same as images length!')
-
             try:
                 ax.set_title(str(titles[i - 1]), fontdict={'fontsize': title_size, 'fontweight': 'medium'})
             except:

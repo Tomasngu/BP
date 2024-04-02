@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import os
 
 ELEPHANT_SIZE = 2.5
 IMG_WIDTH, IMG_HEIGHT = 1920, 1000
@@ -59,12 +60,14 @@ CAMERA_to_REAL = {
     6: MAP_REAL_WIDTH_6,
     7: MAP_REAL_WIDTH_7
 }
+
+MODULE_DIR = os.path.dirname(__file__)
 CAMERA_to_PATH = {
-    1: 'maps/map12.png',
-    2: 'maps/map12.png',
-    4: 'maps/map4_real.png',
-    6: 'maps/map6_real.png',
-    7: 'maps/map7.png',
+    1: os.path.join(MODULE_DIR, 'maps/map12.png'),
+    2: os.path.join(MODULE_DIR, 'maps/map12.png'),
+    4: os.path.join(MODULE_DIR, 'maps/map4_real.png'),
+    6: os.path.join(MODULE_DIR, 'maps/map6_real.png'),
+    7: os.path.join(MODULE_DIR, 'maps/map7.png')
 }
 
 def shift(x, y, width, height, camera):
