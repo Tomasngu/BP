@@ -17,7 +17,7 @@ parameter_grid = ParameterGrid(hyperparameter_grid)
 
 for parameters in parameter_grid:
     detector = ElephantDetector()
-    detector.train(paramaters=parameters)
+    detector.train(**parameters)
     # model = YOLO('yolov8l.pt')
     # print(parameters)
     # results = model.train(data='config.yaml', epochs=300, **parameters, cache=False, device='1', verbose=False, project='best_run')
