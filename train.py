@@ -2,11 +2,10 @@ from ultralytics import YOLO
 import cv2
 import matplotlib.pyplot as plt
 from sklearn.model_selection import ParameterGrid
+from detector.elephant_detector import ElephantDetector
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
-#model = YOLO('yolov8l.pt').to('cuda:1')  # load an official model
-#results = model.train(data='config.yaml', epochs=200, batch=16)
 
 hyperparameter_grid = {
     'lr0': [0.001, 0.01],         # Initial learning rate            # Final learning rate as a factor of lr0
@@ -17,8 +16,9 @@ hyperparameter_grid = {
 parameter_grid = ParameterGrid(hyperparameter_grid)
 
 for parameters in parameter_grid:
-    # Set hyperparameters for the model
-    model = YOLO('yolov8l.pt')  # load an official model
-    print(parameters)
-    results = model.train(data='config.yaml', epochs=300, **parameters, cache=False, device='1', verbose=False, project='best_run')
+    detector = ElephantDetector()
+    detector.train(paramaters=parameters)
+    # model = YOLO('yolov8l.pt')
+    # print(parameters)
+    # results = model.train(data='config.yaml', epochs=300, **parameters, cache=False, device='1', verbose=False, project='best_run')
     
