@@ -201,7 +201,7 @@ class ElephantDetector:
             labeled_img = result[0].plot()
         self.show(labeled_img)
         
-    def train(self, data='config.yaml', epochs=300, project='train_run', **paramaters):
+    def train(self, data='config.yaml', epochs=300, project='train_run', **parameters):
         results = self.model.train(data=data, epochs=epochs, cache=False, device=self.device, verbose=False, project=project, **parameters)
         return results
         
