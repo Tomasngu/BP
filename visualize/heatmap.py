@@ -3,6 +3,7 @@ import numpy as np
 from visualize.perspective import *
 from visualize.layout import *
 from visualize.image_points import *
+from visualize.helper import *
 from datetime import datetime, timedelta
 
 
@@ -135,7 +136,7 @@ def is_within_time_window(row_time, current_time, delta=timedelta(minutes=15)):
     return current_datetime - delta <= row_datetime <= current_datetime + delta
 
 
-def heatmap_by_hour(df_proj, hour_sampling, days_interval):
+def heatmap_by_hour(df_proj, hour_sampling, days_interval, save_dir='tmp_heatmaps', show=True):
     """
     Generates and saves heatmaps for different time windows within a day.
 
@@ -143,6 +144,7 @@ def heatmap_by_hour(df_proj, hour_sampling, days_interval):
     - df_proj (DataFrame): Projected data containing coordinates and timestamps for heatmap generation.
     - hour_sampling (int): The interval in hours to divide the day for separate heatmaps.
     - days_interval (int): The number of days over which the data spans, used for scaling.
+    - save_dir (str): Path to directory where the heatmaps will be stored
     """
     df_proj['Hour'] = df_proj['Date'].dt.hour
     def map_to_time_window(hour):
@@ -154,20 +156,23 @@ def heatmap_by_hour(df_proj, hour_sampling, days_interval):
     time_windows.sort()
     def all_heatmaps_exist(time_windows):
         for tw in time_windows:
-            save_path = f'tmp_heatmaps/he{tw}.png'
+            save_path = f'{save_dir}/he{tw}.png'
             if not os.path.exists(save_path):
                 return False  
         return True 
     if not all_heatmaps_exist(time_windows):
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
         for tw in time_windows:
             df = df_proj[df_proj['Time_Window'] == tw]
-            create_full_heatmap(df=df, save_path=f'tmp_heatmaps/he{tw}.png', title=tw, days_interval=days_interval)
+            create_full_heatmap(df=df, save_path=f'{save_dir}/he{tw}.png', title=tw, days_interval=days_interval)
     else:
         print('Heatmaps already cached.')
-    image_paths = [f"tmp_heatmaps/he{x}.png" for x in time_windows]
+    image_paths = [f"{save_dir}/he{x}.png" for x in time_windows]
     images = [cv2.imread(path) for path in image_paths]
     rows = [cv2.hconcat(images[i:i+int(24/hour_sampling/4)]) for i in range(0, 24//hour_sampling, int(24/hour_sampling/4))]
     # Vertically concatenate the rows to form the final grid
     stacked_image = cv2.vconcat(rows)
-    plot_images(stacked_image, height=200, width=200)
-    cv2.imwrite('he_all.png', stacked_image)
+    if show:
+        plot_images(stacked_image, height=200, width=200)
+    cv2.imwrite(f'{save_dir}/he_all.png', stacked_image)

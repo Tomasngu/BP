@@ -4,6 +4,15 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 def create_layout(overlayed_img1, overlayed_img4 , overlayed_img6, overlayed_img7):
+    """
+    Creates a single layout image by horizontally stacking and resizing given overlay images.
+
+    Parameters:
+    - overlayed_img1, overlayed_img4, overlayed_img6, overlayed_img7 (numpy.ndarray): The overlayed images to be combined into the layout.
+    
+    Returns:
+    - final_layout (numpy.ndarray): The combined layout image.
+    """
     top_part = np.hstack((overlayed_img7, overlayed_img1))
     final_width = top_part.shape[1]
 
@@ -29,6 +38,19 @@ def create_layout(overlayed_img1, overlayed_img4 , overlayed_img6, overlayed_img
 
 
 def add_colorbar(image, min_val, max_val, title=None, show=False):
+    """
+    Adds a vertical colorbar to an image and displays or returns the figure.
+
+    Parameters:
+    - image (numpy.ndarray): The input image to which the colorbar will be added.
+    - min_val (float): Minimum value for the colorbar scale.
+    - max_val (float): Maximum value for the colorbar scale.
+    - title (str, optional): Title for the figure. Defaults to None.
+    - show (bool, optional): If True, displays the figure; otherwise, the figure is kept closed for later use. Defaults to False.
+    
+    Returns:
+    - fig (matplotlib.figure.Figure): The figure object containing the image and the colorbar.
+    """
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 10),
                                    gridspec_kw={'width_ratios': [20, 1], 'wspace': 0.05})
     if title is not None:
@@ -58,6 +80,19 @@ def add_colorbar(image, min_val, max_val, title=None, show=False):
     return fig
 
 def add_colorbar_image(image, min_val, max_val, title=None, show=False):
+    """
+    Adds a vertical colorbar to an image, suitable for images representing heatmaps, and returns the figure.
+
+    Parameters:
+    - image (numpy.ndarray): The heatmap image to which the colorbar will be added.
+    - min_val (float): Minimum value for the colorbar scale, representing the lower bound of the heatmap's scale.
+    - max_val (float): Maximum value for the colorbar scale, representing the upper bound of the heatmap's scale.
+    - title (str, optional): Title for the figure. Defaults to None.
+    - show (bool, optional): If True, the figure is displayed using plt.show(); otherwise, the display is suppressed. Defaults to False.
+    
+    Returns:
+    - fig (matplotlib.figure.Figure): The figure object containing the heatmap and the colorbar.
+    """
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 4),
                                    gridspec_kw={'width_ratios': [20, 1], 'wspace': 0.05})
     if title is not None:

@@ -117,13 +117,3 @@ def plot_polygon_on_image(image, vertices, is_closed=True, color=(0, 255, 0), th
     cv2.polylines(image, [points], isClosed=is_closed, color=color, thickness=thickness)
 
 
-def downscale_image_by_2(input_image_path, output_image_path):
-    # Read the input image using OpenCV
-    input_image = cv2.imread(input_image_path)
-
-    # Downscale the image by a factor of 2
-    downscaled_image = cv2.resize(input_image, (0,0), fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-
-    # Save the downscaled image
-    cv2.imwrite(output_image_path, downscaled_image)
-
