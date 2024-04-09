@@ -200,6 +200,32 @@ class ElephantDetector:
         else:
             labeled_img = result[0].plot()
         self.show(labeled_img)
+    
+    def save_labeled(self, dir_path, output_path):
+        """
+        Saves images with labels to given path
+
+        Parameters:
+        - dir_path (str): Path to images.
+        - dir_path (str): where to images should be stored
+        """
+        if os.path.exists(output_path):
+            shutil.rmtree(output_path)
+            
+        self.model(dir_path, save=True, project=output_path)
+        
+        
+        source_dir = os.path.join(output_path, 'predict')
+        for filename in os.listdir(source_dir):
+            source_file = os.path.join(source_dir, filename)
+            target_file = os.path.join(output_path, filename)
+
+            if os.path.isfile(source_file):
+                shutil.move(source_file, target_file)
+                # print(f"Moved: {source_file} to {target_file}")
+
+        if os.path.exists(source_dir):
+            shutil.rmtree(source_dir)
         
     def train(self, data='config.yaml', epochs=300, project='train_run', **parameters):
         results = self.model.train(data=data, epochs=epochs, cache=False, device=self.device, verbose=False, project=project, **parameters)
