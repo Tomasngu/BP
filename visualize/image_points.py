@@ -70,6 +70,14 @@ CAMERA_to_PATH = {
     7: os.path.join(MODULE_DIR, 'maps/map7.png')
 }
 
+CAMERA_to_BACKGROUND = {
+    1: os.path.join(MODULE_DIR, 'backgrounds/background1.png'),
+    2: os.path.join(MODULE_DIR, 'backgrounds/background2.png'),
+    4: os.path.join(MODULE_DIR, 'backgrounds/background4.png'),
+    6: os.path.join(MODULE_DIR, 'backgrounds/background6.png'),
+    7: os.path.join(MODULE_DIR, 'backgrounds/background7.png'),
+}
+
 def shift(x, y, width, height, camera):
     y += height/3
     return x, y, width, height
