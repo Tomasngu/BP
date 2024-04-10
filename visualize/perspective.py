@@ -4,10 +4,22 @@ from visualize.image_points import *
 import pandas as pd
 
 def transform_row(M, x, y):
+    """
+    Transforms a single point (x, y) using a given transformation matrix.
+
+    Parameters:
+    - M (numpy.ndarray): The transformation matrix.
+    - x (float): The x-coordinate of the point.
+    - y (float): The y-coordinate of the point.
+
+    Returns:
+    - tuple: The transformed (x, y) coordinates.
+    """
+    
 
     def transform_point(M, x, y):
         """
-        Apply projective transformation
+        Apply projective transformation.
         """
         points = np.array([[x, y]], dtype='float32')  
         points_reshaped = np.array([points])
@@ -19,10 +31,31 @@ def transform_row(M, x, y):
 
 
 def get_size(map_width_px, map_height_px, map_width_real):
+    """
+    Calculates the size ratio between the real world and the map dimensions.
+
+    Parameters:
+    - map_width_px (int): Width of the map in pixels.
+    - map_height_px (int): Height of the map in pixels.
+    - map_width_real (float): Real world width corresponding to the map width.
+
+    Returns:
+    - tuple: The width and height ratio.
+    """
     ratio = ELEPHANT_SIZE/map_width_real
     return ratio, ratio*map_width_px/map_height_px
 
 def remove_duplicate_elephants(df, threshold=0.1):
+    """
+    Removes duplicate elephant detections overlapping in camera 1 and 2 based on a distance threshold.
+
+    Parameters:
+    - df (pandas.DataFrame): The dataframe containing elephant detections.
+    - threshold (float, optional): The distance threshold for considering detections as duplicates.
+
+    Returns:
+    - pandas.DataFrame: The cleaned dataframe with duplicates removed.
+    """
     def calculate_distance(row1, row2):
         """Calculate the Euclidean distance between two points."""
         return np.linalg.norm(np.array([row1['X_center'], row1['Y_center']]) - np.array([row2['X_center'], row2['Y_center']]))
@@ -53,6 +86,15 @@ def remove_duplicate_elephants(df, threshold=0.1):
     return df_cleaned
 
 def project_df(df):
+    """
+    Projects data points from image coordinates to map coordinates.
+
+    Parameters:
+    - df (pandas.DataFrame): Dataframe containing the detection data with elephant coordinates.
+
+    Returns:
+    - pandas.DataFrame: New dataframe with projected map coordinates.
+    """
     df_proj = pd.DataFrame(columns=['Camera', 'Date', 'X_center', 'Y_center', 'Width', 'Height'])
     for index, row in df.iterrows():
         data = {}
@@ -78,6 +120,17 @@ def project_df(df):
     return df_proj
 
 def get_heatmap_new(df, camera, size):
+    """
+    Generates a heatmap for specified cameras within a dataframe.
+
+    Parameters:
+    - df (pandas.DataFrame): The dataframe containing detection data.
+    - camera (list): List of camera IDs for which to generate the heatmap.
+    - size (tuple): The dimensions (width, height) for the heatmap.
+
+    Returns:
+    - numpy.ndarray: The generated heatmap as a 2D numpy array.
+    """
     df = df[df['Camera'].isin(camera)]
 
     heatmap_width, heatmap_height = size
