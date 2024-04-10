@@ -6,6 +6,9 @@ import pandas as pd
 def transform_row(M, x, y):
 
     def transform_point(M, x, y):
+        """
+        Apply projective transformation
+        """
         points = np.array([[x, y]], dtype='float32')  
         points_reshaped = np.array([points])
         pointsOut = cv2.perspectiveTransform(points_reshaped, M)
@@ -76,28 +79,26 @@ def project_df(df):
 
 def get_heatmap_new(df, camera, size):
     df = df[df['Camera'].isin(camera)]
-    # print(df['Camera'])
 
-    # Specify the dimensions of the heatmap
     heatmap_width, heatmap_height = size
 
-    # Initialize a blank image for the heatmap
     heatmap_img = np.zeros((heatmap_height, heatmap_width), dtype=np.float32)
 
     # Function to apply intensity within the bounding box area
     def apply_bounded_gaussian_heatmap(cx, cy, w, h, heatmap):
         # Calculate the bounding box in pixel coordinates
         left = int(max(0, cx - w/2))
-        right = int(min(heatmap_width, cx + w/2))
+        right = int(min(heatmap_width-1, cx + w/2))
         top = int(max(0, cy - h/2))
-        bottom = int(min(heatmap_height, cy + h/2))
+        bottom = int(min(heatmap_height-1, cy + h/2))
 
-        for y in range(top, bottom):
-            for x in range(left, right):
-                value = 1
-                heatmap[y, x] += 1*value
+        if(left >= heatmap_width or right < 0) or (top >= heatmap_height or bottom < 0):
+            return
+        
+        value = 1
+        heatmap[top:bottom, left:right] += value
 
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
         cx, cy, w, h = row['X_center'] * heatmap_width, row['Y_center'] * heatmap_height, row['Width'] * heatmap_width, row['Height'] * heatmap_height
         apply_bounded_gaussian_heatmap(cx, cy, w, h, heatmap_img)
         
