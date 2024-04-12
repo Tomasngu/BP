@@ -118,6 +118,34 @@ def one_heatmap_background(df, camera, background_img, min_scale=3):
     overlayed_img = cv2.addWeighted(original_img, 1, heatmap_color, 0.5, 0)
     return overlayed_img
 
+def one_heatmap_raw(df, camera, min_scale=20):
+    """
+    Generates a heatmap for a single camera.
+
+    Parameters:
+    - df (DataFrame): Data containing coordinates for heatmap generation.
+    - camera (list): List containing the camera number for which the heatmap is generated.
+    - min_scale (int, optional): Minimum scale for heatmap intensity.
+    
+    Returns:
+    - overlayed_img (ndarray): The original camera image overlayed with the heatmap.
+    """
+    heatmap = get_heatmap_new(df, camera, (IMG_WIDTH, IMG_HEIGHT))
+    global_max = np.max(heatmap)
+    heatmap_scaled = (heatmap / global_max) * 255 
+    heatmap_scaled = np.clip(heatmap_scaled, 0, 255).astype(np.uint8) 
+    zero_mask = (heatmap_scaled < 255/min_scale)
+
+    heatmap_color = cv2.applyColorMap(heatmap_scaled, cv2.COLORMAP_JET)
+    heatmap_color[zero_mask] = (0,0,0)
+    
+    original_img = cv2.imread(CAMERA_to_BACKGROUND[camera[0]])
+    overlayed_img = cv2.addWeighted(original_img, 0.8, heatmap_color, 1, 0)
+    # plt.figure()
+    # plt.imshow(overlayed_img[..., ::-1]) 
+    # plt.show()
+    return overlayed_img
+
 def is_within_time_window(row_time, current_time, delta=timedelta(minutes=15)):
     """
     Checks if a given time is within a specified window around the current time.

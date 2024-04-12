@@ -41,6 +41,23 @@ def plot_images(*imgs, titles=[], title_size=32, width=30, height=30):
                 pass
 
         ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        
+def resize_to_match_height(image1, image2):
+    """
+    Resize the first image to match the height of the second image while maintaining aspect ratio.
+
+    Parameters:
+    image1 (numpy.ndarray): The first image to be resized.
+    image2 (numpy.ndarray): The second image.
+
+    Returns:
+    numpy.ndarray: The resized version of the first image.
+    """
+    target_height = image2.shape[0]
+    original_height, original_width = image1.shape[:2]
+    new_width = int(original_width * (target_height / original_height))
+    resized_img1 = cv2.resize(image1, (new_width, target_height))
+    return resized_img1
 
 def plot_rectangle_on_image(image, cx, cy, w, h, color=(0, 255, 0), thickness=2):
     """
