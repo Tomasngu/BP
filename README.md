@@ -16,3 +16,12 @@
    ```
    
 
+## Ukázkové notebooky
+
+Tato práce obsahuje 3 spustitelné ukázkové notebooky demonstrující finální výtvory tohoto projektu.
+
+| Název   | popis        |
+|--------|---------------|
+| 1. [showcase_heatmaps](showcase_heatmaps.ipynb) | Ukázka tvorby heatmap z obrazového datasetu |
+| 2. [showcase_recommend](showcase_recommend.ipynb) | Ukázka vytvořeného doporučovacího systému |
+| 3. [showcase_scraping](showcase_scraping.ipynb) | Ukázka systému pro scrapování dat z živých streamů Údolí slonů|
