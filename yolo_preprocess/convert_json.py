@@ -1,6 +1,7 @@
 import os
 import shutil
-from .JSON2YOLO.general_json2yolo import convert_coco_json
+from .JSON2YOLO.general_json2yolo import convert_coco_json 
+## Glenn Jocher. (2019). ultralytics/COCO2YOLO: Improvements (Verze v1). Zenodo. https://doi.org/10.5281/zenodo.2738323
 
 DEFAULT_DIR = 'new_dir'
 
