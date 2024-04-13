@@ -1,5 +1,11 @@
+"""
+Modify config.yaml file if you wanna try this out.
+"""
+
 from ultralytics import YOLO
 import cv2
+import sys
+sys.path.append('..')
 import matplotlib.pyplot as plt
 from sklearn.model_selection import ParameterGrid
 from detector.elephant_detector import ElephantDetector
