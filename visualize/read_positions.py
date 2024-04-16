@@ -8,6 +8,12 @@ PATTERN = re.compile(r'screenshot(\d+)_(\d{2})_(\d{2})__(\d{2})_(\d{2})\.txt')
 NUMERIC_COLS = ['Camera', 'X_center', 'Y_center', 'Width', 'Height']
 
 def read_positions(label_dir='../../data_all/labels', output_csv='positions.csv'):
+    """
+    Reads elephant labels into a csv file if not available, otherwise return it.
+    Parameters:
+    - label_dir (str): Path to annotation labals.
+    - output_csv (str): Path to output csv file.
+    """
     df = pd.DataFrame(columns=['Camera', 'Date', 'X_center', 'Y_center', 'Width', 'Height'])
     csv_file = output_csv
     if os.path.exists(csv_file):
