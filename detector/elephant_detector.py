@@ -207,7 +207,7 @@ class ElephantDetector:
 
         Parameters:
         - dir_path (str): Path to images.
-        - dir_path (str): where to images should be stored
+        - dir_path (str): Where to images should be stored.
         """
         if os.path.exists(output_path):
             shutil.rmtree(output_path)
@@ -228,6 +228,15 @@ class ElephantDetector:
             shutil.rmtree(source_dir)
         
     def train(self, data='config.yaml', epochs=300, project='train_run', **parameters):
+        """
+        Traisn elephant detection model.
+
+        Parameters:
+        - data (str): Path to config file.
+        - epochs (int): Number of epochs.
+        - project (str): Name of project
+        - **parameters (str): Optional YOLO parameters.
+        """
         results = self.model.train(data=data, epochs=epochs, cache=False, device=self.device, verbose=False, project=project, **parameters)
         return results
         

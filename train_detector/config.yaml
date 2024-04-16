@@ -1,4 +1,4 @@
-path: /home/tomas/FIT/BP/target
+path: /Users/tomasnguyen/FIT/BP/implementation/train_detector/target
 train: images/train
 val: images/val
 test: images/test
