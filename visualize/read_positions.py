@@ -18,6 +18,9 @@ def read_positions(label_dir='../../data_all/labels', output_csv='positions.csv'
         return df
     
     for filename in os.listdir(label_dir):
+        ending = os.path.splitext(filename)[0][-2:]
+        if ending not in ['00', '15', '30', '45']:
+            continue
         path = os.path.join(label_dir, filename)
         match = PATTERN.match(filename)
         assert match
