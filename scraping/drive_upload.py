@@ -8,6 +8,10 @@ import time
 import os
 import shutil
 
+"""
+Using this requires creating own credentials, visit url below for more info.
+https://developers.google.com/workspace/guides/create-credentials
+"""
 
 
 def find_or_create_folder(service, folder_name):

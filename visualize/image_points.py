@@ -65,8 +65,8 @@ MODULE_DIR = os.path.dirname(__file__)
 CAMERA_to_PATH = {
     1: os.path.join(MODULE_DIR, 'maps/map12.png'),
     2: os.path.join(MODULE_DIR, 'maps/map12.png'),
-    4: os.path.join(MODULE_DIR, 'maps/map4_real.png'),
-    6: os.path.join(MODULE_DIR, 'maps/map6_real.png'),
+    4: os.path.join(MODULE_DIR, 'maps/map4.png'),
+    6: os.path.join(MODULE_DIR, 'maps/map6_fixed.png'),
     7: os.path.join(MODULE_DIR, 'maps/map7.png')
 }
 
