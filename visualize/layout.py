@@ -54,6 +54,7 @@ def add_colorbar(image, min_val, max_val, title=None, show=False):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 10),
                                    gridspec_kw={'width_ratios': [20, 1], 'wspace': 0.05})
     if title is not None:
+        title = title[:2] + '–' + title[3:]
         fig.suptitle(title, fontsize=16)
         
     # Display the image in the first subplot
@@ -66,13 +67,13 @@ def add_colorbar(image, min_val, max_val, title=None, show=False):
     
     # Create the colorbar in the second subplot
     cb1 = mpl.colorbar.ColorbarBase(ax2, cmap=cmap, norm=norm, orientation='vertical')
-    cb1.set_label('Average # Elephants per day')
+    cb1.set_label('Průměrný počet slonů')
     # Set custom ticks if needed (here just showing min and max)
     tick_values = np.linspace(min_val, max_val, num=11)
     cb1.set_ticks(tick_values)
     cb1.set_ticks(tick_values)
     # cb1.set_ticklabels([f'{min_val}', f'{max_val}'])
-    cb1.set_ticklabels([f'{val.round(1)}' for val in tick_values])
+    cb1.set_ticklabels([f'{val.round(2)}' for val in tick_values])
     if not show:
         plt.close()
     #fig.tight_layout()
@@ -96,6 +97,7 @@ def add_colorbar_image(image, min_val, max_val, title=None, show=False):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 4),
                                    gridspec_kw={'width_ratios': [20, 1], 'wspace': 0.05})
     if title is not None:
+        title = title[:2] + '–' + title[3:]
         fig.suptitle(title, fontsize=16)
         
     # Display the image in the first subplot
@@ -108,13 +110,13 @@ def add_colorbar_image(image, min_val, max_val, title=None, show=False):
     
     # Create the colorbar in the second subplot
     cb1 = mpl.colorbar.ColorbarBase(ax2, cmap=cmap, norm=norm, orientation='vertical')
-    cb1.set_label('Average # Elephants per day')
+    cb1.set_label('Průměrný počet slonů')
     # Set custom ticks if needed (here just showing min and max)
     tick_values = np.linspace(min_val, max_val, num=11)
     cb1.set_ticks(tick_values)
     cb1.set_ticks(tick_values)
     # cb1.set_ticklabels([f'{min_val}', f'{max_val}'])
-    cb1.set_ticklabels([f'{val.round(1)}' for val in tick_values])
+    cb1.set_ticklabels([f'{val.round(2)}' for val in tick_values])
     if not show:
         plt.close()
     #fig.tight_layout()
