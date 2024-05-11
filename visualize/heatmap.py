@@ -202,5 +202,5 @@ def heatmap_by_hour(df_proj, hour_sampling, days_interval, save_dir='tmp_heatmap
     # Vertically concatenate the rows to form the final grid
     stacked_image = cv2.vconcat(rows)
     if show:
-        plot_images(stacked_image, height=200, width=200)
+        plot_images(stacked_image, height=100, width=100)
     cv2.imwrite(f'{save_dir}/he_all.png', stacked_image)
